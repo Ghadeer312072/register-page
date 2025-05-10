@@ -4,7 +4,7 @@ import Layout from './components/Layout'
 import Landing from './components/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Forgetpass from './pages/Forgetpass'
+import Forgetpass from './components/Forgetpass'
 
 export default function App() {
   

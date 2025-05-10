@@ -11,7 +11,8 @@ export default function Register() {
   const userData={
     usrename,
     usreemail,
-    usrepassword
+    usrepassword,
+    userSignin:false
   }
   const storage=(name,x)=>{
     localStorage.setItem(name,JSON.stringify(x))

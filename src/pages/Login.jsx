@@ -21,8 +21,9 @@ export default function Login() {
       nameRef.current.value === parsedData.usrename &&
       passwordRef.current.value === parsedData.usrepassword
     ) {
+      localStorage.setItem("usersign",true)
       alert(`Welcome back ${parsedData.usrename}!`)
-   
+      
       nameRef.current.value = ""
       passwordRef.current.value = ""
       setTimeout(()=>{

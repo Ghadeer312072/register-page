@@ -5,17 +5,15 @@ export default function Header() {
   const x = useRef()
   const navX = useRef()
   const navY = useRef()
-  const btnLogout = useRef()
   const move = useNavigate()
   const location = useLocation()
-  const isLoginPage = location.pathname === "/login"
-  
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("userData")
-    return storedUser ? JSON.parse(storedUser) : null
-  })
-  useEffect(()=>{
-  window.addEventListener("scroll",()=>{
+  const usersign=JSON.parse(localStorage.getItem("usersign"))
+
+  const [user, setUser] = useState(null)
+ 
+useEffect(()=>{
+       const changeHeaderHeight=()=>{
+    if(!x.current)return;
     if(window.scrollY>60){
       x.current.classList.add("bg-slate-900");
       x.current.classList.add("md:h-[90px]")
@@ -23,15 +21,21 @@ export default function Header() {
       x.current.classList.remove("bg-slate-900");
       x.current.classList.remove("md:h-[100px]")
     }
-  })
-  },[])
-  useEffect(() => {
-    if (isLoginPage) {
-      navY.current?.classList.add("hidden")
-      return
     }
-
-    if (user) {
+    
+  window.addEventListener("scroll",changeHeaderHeight)
+  return ()=>removeEventListener("scroll",changeHeaderHeight)
+  },[])
+ 
+  const updateUserData=()=>{
+ const storedUser = localStorage.getItem("userData")
+   setUser(storedUser ? JSON.parse(storedUser): null) 
+  }
+  useEffect(()=>{
+     updateUserData()
+    window.addEventListener("storage",updateUserData)
+     if(! navX.current||!navY.current)return;
+    if (user&&location.pathname=="/"&&usersign) {
       navX.current?.classList.add("hidden")
       navY.current?.classList.remove("hidden")
       navY.current?.classList.add("flex")
@@ -40,7 +44,10 @@ export default function Header() {
       navX.current?.classList.remove("hidden")
       navY.current?.classList.add("hidden")
     }
-  }, [user, isLoginPage]) 
+    return()=> window.removeEventListener("storage",updateUserData)
+    
+  },[location.pathname,usersign])
+  
 
   const logoutAction = () => {
     localStorage.removeItem("userData")
@@ -49,6 +56,7 @@ export default function Header() {
   }
 
    return (
+  
     <div ref={x} className="container fixed h-32 md:h-[100px] top-0 max-w-full transition-all duration-150 text-white">
       <div className='m-auto flex flex-col py-2 md:flex-row max-w-full md:w-[90%] items-center h-full md:justify-between'>
         <Link to="/">
@@ -70,7 +78,7 @@ export default function Header() {
               <img className='rounded-xl w-[40%] bg-gray-400 px-1' src="/src/assets/images/person-male-svgrepo-com.svg" alt="#" />
             </li>
             <li className='w-[40%] ml-[40px]  text-xl'>
-              <button className='border-2 p-2 rounded-lg hover:bg-slate-500' onClick={logoutAction} ref={btnLogout}>logout</button>
+              <button className='border-2 p-2 rounded-lg hover:bg-slate-500' onClick={logoutAction} >logout</button>
             </li>
           </ul>
         </nav>
